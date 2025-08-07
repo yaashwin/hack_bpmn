@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20191111/MODEL" xmlns:dmndi="http://www.omg.org/spec/DMN/20191111/DMNDI" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="E-commerce Platform Decisions" namespace="http://example.org/ecommerce">
+  <decision id="IsGuestCheckoutAllowed" name="Is Guest Checkout Allowed">
+    <description>Determines if guest checkout is allowed based on the order value.</description>
+    <inputDecision id="OrderValue" name="Order Value">
+      <variable id="OrderValue" name="Order Value" typeRef="number"/>
+    </inputDecision>
+    <outputDecision id="AllowGuestCheckout" name="Allow Guest Checkout">
+      <variable id="AllowGuestCheckout" name="Allow Guest Checkout" typeRef="boolean"/>
+    </outputDecision>
+    <rule id="Rule_1" name="Allow Guest Checkout for low value orders">
+      <inputEntry>
+        <condition>
+          <literalExpression>
+            <text>OrderValue &lt; 50</text>
+          </literalExpression>
+        </condition>
+      </inputEntry>
+      <outputEntry>
+        <literalExpression>
+          <text>true</text>
+        </literalExpression>
+      </outputEntry>
+    </rule>
+    <rule id="Rule_2" name="Disallow Guest Checkout for high value orders">
+      <inputEntry>
+        <condition>
+          <literalExpression>
+            <text>OrderValue &gt;= 50</text>
+          </literalExpression>
+        </condition>
+      </inputEntry>
+      <outputEntry>
+        <literalExpression>
+          <text>false</text>
+        </literalExpression>
+      </outputEntry>
+    </rule>
+  </decision>
+  <decision id="CalculateShippingCost" name="Calculate Shipping Cost">
+    <description>Calculates shipping cost based on order weight and destination.</description>
+    <inputDecision id="OrderWeight" name="Order Weight">
+      <variable id="OrderWeight" name="Order Weight" typeRef="number"/>
+    </inputDecision>
+    <inputDecision id="Destination" name="Destination">
+      <variable id="Destination" name="Destination" typeRef="string"/>
+    </inputDecision>
+    <outputDecision id="ShippingCost" name="Shipping Cost">
+      <variable id="ShippingCost" name="Shipping Cost" typeRef="number"/>
+    </outputDecision>
+    <!-- Add rules for shipping cost calculation based on weight and destination -->
+  </decision>
+</definitions>
