@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://bpmn.io/schema/bpmn">
+  <process id="Process_1" isExecutable="false">
+    <startEvent id="StartEvent_1" name="RFC Submitted">
+      <outgoing>SequenceFlow_1</outgoing>
+    </startEvent>
+    <sequenceFlow id="SequenceFlow_1" sourceRef="StartEvent_1" targetRef="Task_1" />
+    <task id="Task_1" name="Log RFC and Initial Review">
+      <incoming>SequenceFlow_1</incoming>
+      <outgoing>SequenceFlow_2</outgoing>
+    </task>
+    <sequenceFlow id="SequenceFlow_2" sourceRef="Task_1" targetRef="ExclusiveGateway_1" />
+    <exclusiveGateway id="ExclusiveGateway_1" name="RFC Valid?" gatewayDirection="Unspecified">
+      <incoming>SequenceFlow_2</incoming>
+      <outgoing>SequenceFlow_3</outgoing>
+      <outgoing>SequenceFlow_4</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="SequenceFlow_3" sourceRef="ExclusiveGateway_1" targetRef="ParallelGateway_1" name="Yes">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[true]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_4" sourceRef="ExclusiveGateway_1" targetRef="Task_2" name="No">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[false]]></conditionExpression>
+    </sequenceFlow>
+    <task id="Task_2" name="Prepare Rejection Documentation and Notify Requester">
+      <incoming>SequenceFlow_4</incoming>
+      <outgoing>SequenceFlow_5</outgoing>
+    </task>
+    <sequenceFlow id="SequenceFlow_5" sourceRef="Task_2" targetRef="EndEvent_1" />
+    <parallelGateway id="ParallelGateway_1" name="Start Parallel Tasks">
+      <incoming>SequenceFlow_3</incoming>
+      <outgoing>SequenceFlow_6</outgoing>
+      <outgoing>SequenceFlow_7</outgoing>
+    </parallelGateway>
+    <sequenceFlow id="SequenceFlow_6" sourceRef="ParallelGateway_1" targetRef="Task_3" />
+    <sequenceFlow id="SequenceFlow_7" sourceRef="ParallelGateway_1" targetRef="Task_4" />
+    <task id="Task_3" name="Develop Implementation and Rollback Plans">
+      <incoming>SequenceFlow_6</incoming>
+      <outgoing>SequenceFlow_8</outgoing>
+    </task>
+    <task id="Task_4" name="Conduct Technical Impact Assessment">
+      <incoming>SequenceFlow_7</incoming>
+      <outgoing>SequenceFlow_9</outgoing>
+    </task>
+    <sequenceFlow id="SequenceFlow_8" sourceRef="Task_3" targetRef="ParallelGateway_2" />
+    <sequenceFlow id="SequenceFlow_9" sourceRef="Task_4" targetRef="ParallelGateway_2" />
+    <parallelGateway id="ParallelGateway_2" name="Consolidate Analysis">
+      <incoming>SequenceFlow_8</incoming>
+      <incoming>SequenceFlow_9</incoming>
+      <outgoing>SequenceFlow_10</outgoing>
+    </parallelGateway>
+    <sequenceFlow id="SequenceFlow_10" sourceRef="ParallelGateway_2" targetRef="Task_5" />
+    <task id="Task_5" name="Change Advisory Board Review">
+      <incoming>SequenceFlow_10</incoming>
+      <outgoing>SequenceFlow_11</outgoing>
+    </task>
+    <sequenceFlow id="SequenceFlow_11" sourceRef="Task_5" targetRef="ExclusiveGateway_2" />
+    <exclusiveGateway id="ExclusiveGateway_2" name="CAB Approval?" gatewayDirection="Unspecified">
+      <incoming>SequenceFlow_11</incoming>
+      <outgoing>SequenceFlow_12</outgoing>
+      <outgoing>SequenceFlow_13</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="SequenceFlow_12" sourceRef="ExclusiveGateway_2" targetRef="Task_6" name="Yes">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[true]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_13" sourceRef="ExclusiveGateway_2" targetRef="Task_2" name="No">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[false]]></conditionExpression>
+    </sequenceFlow>
+    <task id="Task_6" name="Implement Change">
+      <incoming>SequenceFlow_12</incoming>
+      <outgoing>SequenceFlow_14</outgoing>
+    </task>
+    <sequenceFlow id="SequenceFlow_14" sourceRef="Task_6" targetRef="ExclusiveGateway_3" />
+    <exclusiveGateway id="ExclusiveGateway_3" name="Implementation Successful?" gatewayDirection="Unspecified">
+      <incoming>SequenceFlow_14</incoming>
+      <outgoing>SequenceFlow_15</outgoing>
+      <outgoing>SequenceFlow_16</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="SequenceFlow_15" sourceRef="ExclusiveGateway_3" targetRef="Task_7" name="Yes">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[true]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_16" sourceRef="ExclusiveGateway_3" targetRef="Task_8" name="No">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[false]]></conditionExpression>
+    </sequenceFlow>
+    <task id="Task_7" name="Post Implementation Review">
+      <incoming>SequenceFlow_15</incoming>
+      <outgoing>SequenceFlow_17</outgoing>
+    </task>
+    <task id="Task_8" name="Execute Rollback Plan">
+      <incoming>SequenceFlow_16</incoming>
+      <outgoing>SequenceFlow_18</outgoing>
+    </task>
+    <sequenceFlow id="SequenceFlow_17" sourceRef="Task_7" targetRef="Task_9" />
+    <sequenceFlow id="SequenceFlow_18" sourceRef="Task_8" targetRef="EndEvent_2" />
+    <task id="Task_9" name="Confirm with Requester">
+      <incoming>SequenceFlow_17</incoming>
+      <outgoing>SequenceFlow_19</outgoing>
+    </task>
+    <sequenceFlow id="SequenceFlow_19" sourceRef="Task_9" targetRef="EndEvent_2" />
+    <endEvent id="EndEvent_1" name="Process Ended (Rejection)">
+      <incoming>SequenceFlow_5</incoming>
+    </endEvent>
+    <endEvent id="EndEvent_2" name="Process Ended">
+      <incoming>SequenceFlow_18</incoming>
+      <incoming>SequenceFlow_19</incoming>
+    </endEvent>
+  </process>
+</definitions>

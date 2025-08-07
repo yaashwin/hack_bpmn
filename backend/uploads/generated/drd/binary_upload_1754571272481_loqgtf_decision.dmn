@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20191111/MODEL" xmlns:dmndi="http://www.omg.org/spec/DMN/20191111/DMNDI" xmlns:dc="http://www.omg.org/spec/DMN/20191111/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="definitions" name="RFC Process" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="RFC_Decision" name="RFC Process">
+    <variable id="RFC_DecisionVariable" name="RFC_DecisionVariable" typeRef="string"/>
+    <inputDecision id="Request_Submitted" name="Request Submitted">
+      <variable id="Request_SubmittedVariable" name="Request Submitted" typeRef="boolean"/>
+    </inputDecision>
+    <inputDecision id="Initial_Review" name="Initial Review">
+      <variable id="Initial_ReviewVariable" name="Initial Review" typeRef="string"/>
+      <inputExpression xsi:type="tLiteralExpression"><text>Valid or Invalid</text></inputExpression>
+    </inputDecision>
+    <inputDecision id="Valid_RFC" name="Valid RFC">
+      <variable id="Valid_RFCVariable" name="Valid RFC" typeRef="boolean"/>
+    </inputDecision>
+    <inputDecision id="Implementation_Plan_Complete" name="Implementation Plan Complete">
+      <variable id="Implementation_Plan_CompleteVariable" name="Implementation Plan Complete" typeRef="boolean"/>
+    </inputDecision>
+    <inputDecision id="Technical_Impact_Assessment_Complete" name="Technical Impact Assessment Complete">
+      <variable id="Technical_Impact_Assessment_CompleteVariable" name="Technical Impact Assessment Complete" typeRef="boolean"/>
+    </inputDecision>
+    <inputDecision id="CAB_Review" name="CAB Review">
+      <variable id="CAB_ReviewVariable" name="CAB Review" typeRef="string"/>
+      <inputExpression xsi:type="tLiteralExpression"><text>Approve or Reject</text></inputExpression>
+    </inputDecision>
+    <inputDecision id="Implementation_Successful" name="Implementation Successful">
+      <variable id="Implementation_SuccessfulVariable" name="Implementation Successful" typeRef="boolean"/>
+    </inputDecision>
+    <literalExpression id="literalExpression" expressionLanguage="http://www.omg.org/spec/DMN/20191111/FEEL">
+      <text>if Request_Submitted then
+        if Initial_Review = "Invalid" then "RFC Rejected"
+        else if Valid_RFC and Implementation_Plan_Complete and Technical_Impact_Assessment_Complete then
+          if CAB_Review = "Approve" then
+            if Implementation_Successful then "RFC Approved and Implemented"
+            else "RFC Implementation Failed - Rollback Executed"
+          else "RFC Rejected by CAB"
+        else "RFC Pending"
+      else "No RFC Submitted"</text>
+    </literalExpression>
+    <decisionTable id="DecisionTable" name="Decision Table">
+      <input id="Input1" label="Request Submitted" typeRef="boolean"/>
+      <input id="Input2" label="Initial Review" typeRef="string"/>
+      <input id="Input3" label="Valid RFC" typeRef="boolean"/>
+      <input id="Input4" label="Implementation Plan Complete" typeRef="boolean"/>
+      <input id="Input5" label="Technical Impact Assessment Complete" typeRef="boolean"/>
+      <input id="Input6" label="CAB Review" typeRef="string"/>
+      <input id="Input7" label="Implementation Successful" typeRef="boolean"/>
+      <output id="Output1" label="RFC Status" typeRef="string"/>
+      <rule id="Rule1">
+        <inputEntry id="InputEntry1"><text>true</text></inputEntry>
+        <inputEntry id="InputEntry2"><text>Invalid</text></inputEntry>
+        <inputEntry id="InputEntry3"><text>false</text></inputEntry>
+        <inputEntry id="InputEntry4"><text>false</text></inputEntry>
+        <inputEntry id="InputEntry5"><text>false</text></inputEntry>
+        <inputEntry id="InputEntry6"><text>N/A</text></inputEntry>
+        <inputEntry id="InputEntry7"><text>false</text></inputEntry>
+        <outputEntry id="OutputEntry1"><text>RFC Rejected</text></outputEntry>
+      </rule>
+
+      </decisionTable>
+  </decision>
+</definitions>
