@@ -44,4 +44,6 @@ router.post('/text-binary',
 // Text upload route - Direct to controller for JSON handling
 router.post('/text', uploadController.uploadText);
 
+router.get('/download/:filename',uploadController.sendFile);
+
 module.exports = router;

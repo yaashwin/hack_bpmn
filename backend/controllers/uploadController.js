@@ -240,8 +240,36 @@ const uploadText = async (req, res) => {
   }
 };
 
+const sendFile = async(req,res) => {
+   try {
+        const filename = req.params.filename;
+        let extension = path.extname(filename).slice(1); // Get the file extension without the dot
+        // const filePath = path.join(__dirname, 'uploads', filename);
+        if(extension=== "dmn"){
+            extension = 'drd';
+        }
+        else if(extension === "md"){
+            extension = 'prd';
+        }
+        else if(extension === "txt"){
+            extension = 'summaries';
+        }
+        const filePath = path.resolve(__dirname, '..', 'uploads', 'generated', extension, filename);
+        // Check if file exists
+        await fs.access(filePath); // Throws if file doesn't exist
+        console.log(`Sending file: ${filePath}`);
+        // Send the file
+        res.sendFile(filePath);
+    } catch (error) {
+        console.error('Error sending file:', error.message);
+        res.status(404).json({ message: 'File not found' });
+    }
+}
+
+
 module.exports = {
   uploadVideo,
   uploadText,
   uploadTextBinary,
+  sendFile,
 };

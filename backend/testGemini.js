@@ -10,7 +10,7 @@ async function testGemini() {
       {
         parts: [
           {
-            text: "Explain how photosynthesis works."
+            text: "Summarize the following text in a concise manner."
           }
         ]
       }
